@@ -1,7 +1,7 @@
 ############################
 # Parameters
-# NUM_SAMPLES = 16710
-NUM_SAMPLES = 1000
+NUM_SAMPLES = 16710
+# NUM_SAMPLES = 1000
 ############################
 
 from dataclasses import dataclass

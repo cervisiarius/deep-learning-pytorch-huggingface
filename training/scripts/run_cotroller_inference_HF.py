@@ -28,14 +28,15 @@ Requirements for your chain of thought (i.e., the part of your response that is 
 
 response =  client.chat.completions.create(
     messages=messages,
-    stream=True,
+    # stream=True,
+    stream=False,
     max_tokens=5000
 )
 
-for chunk in response:
-  string = chunk.choices[0].delta.content
-  tokens = tokenizer.encode(string, add_special_tokens=False)
-  tok0 = tokens[0] if len(tokens) > 0 else -1
-  print(f"{string}:{tok0}", end='|')
+# for chunk in response:
+#   string = chunk.choices[0].delta.content
+#   tokens = tokenizer.encode(string, add_special_tokens=False)
+#   tok0 = tokens[0] if len(tokens) > 0 else -1
+#   print(f"{string}:{tok0}", end='|')
 
-# print("Assistant:", response)
+print("Assistant:", response['choices'][0]['message']['content'])
