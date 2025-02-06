@@ -3,7 +3,6 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 import sys
 
 model_name = "deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B"
-
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 
 client = InferenceClient(base_url="http://127.0.0.1:8080")
@@ -33,10 +32,11 @@ response =  client.chat.completions.create(
     max_tokens=5000
 )
 
-# for chunk in response:
-#   string = chunk.choices[0].delta.content
-#   tokens = tokenizer.encode(string, add_special_tokens=False)
-#   tok0 = tokens[0] if len(tokens) > 0 else -1
-#   print(f"{string}:{tok0}", end='|')
+for chunk in response:
+  print(chunk)
+  string = chunk.choices[0].delta.content
+  tokens = tokenizer.encode(string, add_special_tokens=False)
+  tok0 = tokens[0] if len(tokens) > 0 else -1
+  print(f"{string}:{tok0}", end='|')
 
-print("Assistant:", response['choices'][0]['message']['content'])
+# print("Assistant:", response['choices'][0]['message']['content'])

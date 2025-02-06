@@ -19,6 +19,7 @@ from transformers.utils import is_liger_kernel_available
 from trl import SFTTrainer, TrlParser, ModelConfig, SFTConfig, get_peft_config
 from datasets import load_dataset
 from peft import AutoPeftModelForCausalLM
+import json
 
 if is_liger_kernel_available():
     from liger_kernel.transformers import AutoLigerKernelForCausalLM
@@ -107,26 +108,46 @@ def train_function(model_args: ModelConfig, script_args: ScriptArguments, traini
     ################
     # Load tokenizer
     ################
+
+    ########################
+    # Function adeed by Bob:
+    # IMPORTANT for the DeepSeek-R1 models: the chat template strips out the CoT before training, which is bad!
+    # So we modify the Jinja2 template to not strip out the CoT.
+    ########################
+    def get_tokenizer_with_new_chat_template(tokenizer):
+        to_delete = "{% if '</think>' in content %}{% set content = content.split('</think>')[-1] %}{% endif %}"
+        new_template = tokenizer.get_chat_template().replace(to_delete, "")
+        return AutoTokenizer.from_pretrained(
+            script_args.tokenizer_name_or_path if script_args.tokenizer_name_or_path else model_args.model_name_or_path,
+            revision=model_args.model_revision,
+            trust_remote_code=model_args.trust_remote_code,
+            # This line is key!
+            chat_template=new_template,
+        )
+
     tokenizer = AutoTokenizer.from_pretrained(
         script_args.tokenizer_name_or_path if script_args.tokenizer_name_or_path else model_args.model_name_or_path,
         revision=model_args.model_revision,
         trust_remote_code=model_args.trust_remote_code,
     )
-    if tokenizer.pad_token is None: 
-        tokenizer.pad_token = tokenizer.eos_token
-    # if we use peft we need to make sure we use a chat template that is not using special tokens as by default embedding layers will not be trainable 
 
-    # Bob's edit:
-    # IMPORTANT for the DeepSeek-R1 models: the chat template strips out the CoT before training, which is bad!
-    # So we modify the Jinja2 template to not strip out the CoT.
-    current_template = tokenizer.init_kwargs.get("chat_template")
-    to_delete = "{% if '</think>' in content %}{% set content = content.split('</think>')[-1] %}{% endif %}"
-    new_template = current_template.replace(to_delete, "")
-    tokenizer.init_kwargs["chat_template"] = new_template
-    
-    # Bob's edit (since I got a warning):
+    # print(f"==========================: {tokenizer.get_chat_template()}")
+    # print("$$$$$$$$$$$$$$$$")
+    # print(tokenizer.apply_chat_template(train_dataset[1]['messages'], tokenize=False))
+
+    # Bob's edits:
+    tokenizer = get_tokenizer_with_new_chat_template(tokenizer)
     tokenizer.padding_side = "right"
 
+    if tokenizer.pad_token is None: 
+        tokenizer.pad_token = tokenizer.eos_token
+   
+    # print(f"==========================: {tokenizer.get_chat_template()}")
+    # print("$$$$$$$$$$$$$$$$")
+    # print(tokenizer.apply_chat_template(train_dataset[1]['messages'], tokenize=False))
+    # for t in tokenizer.apply_chat_template(train_dataset[1]['messages']):
+    #     print(f"{tokenizer.decode([t])}:{t}", end='|')
+    
     #######################
     # Load pretrained model
     #######################

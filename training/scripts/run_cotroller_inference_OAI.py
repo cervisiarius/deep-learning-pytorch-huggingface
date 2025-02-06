@@ -1,7 +1,3 @@
-# First start server:
-# model_id=cotroller_DeepSeek-R1-Distill-Qwen-1-5B_qlora_1k_ep1
-# docker run --name tgi_cotroller --gpus 1 -d -ti -p 8080:80 --shm-size=2GB -e HF_TOKEN=$(cat ~/.cache/huggingface/token) ghcr.io/huggingface/text-generation-inference:3.0.1 --model-id cervisiarius/${model_id}_MERGED --num-shard 1
-
 from openai import OpenAI
 
 # create client 
@@ -10,33 +6,41 @@ client = OpenAI(base_url="http://localhost:8080/v1",api_key="-")
 system_message = """
 You are a helpful assistant. You first think about the reasoning process in the mind and then provide the user with the answer.
 """
-
+#     {"role": "user", "content": """Return your final response within \\boxed{}.
 # Let R be a finite commutative ring with unity that has no zero divisors (i.e. R is an integral domain). Prove that R is a field.
 
 messages = [
     {"role": "system", "content": system_message},
     {"role": "user", "content": """Return your final response within \\boxed{}.
-How many primes are there?
+How many different ways can you choose 3 numbers from the set {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} such that the sum of the 3 numbers is 15?
 
 ## NOTES
 
 Requirements for your chain of thought (i.e., the part of your response that is between <think> and </think>):
-- It should be 3000 tokens long.
-- It should start with the word "Yes"."""},
+- It should be 30 tokens long.
+- It should start with the word "Alright".
+- It should end with the digit "5"."""},
+    # Force the model to start its response with "<think>".
+    # See advice at https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
+    # {"role": "assistant", "content": "<think>\n"}
 ]
 
 response = client.chat.completions.create(
 	model="cotroller",
 	messages=messages,
-	stream=False, # no streaming
+	stream=True, # enable streaming
 	max_tokens=10000,
+	temperature=0.6
 )
-# response = response.choices[0].message.content
-response = response
 
-# Print results
-print(f"Query:\n{messages[1]['content']}")
-print(f"Generated Answer:\n{response.choices[0].message.content}")
-print(f"Generated Answer:\n{response}")
+full_response = ""
+for chunk in response:
+	delta = chunk.choices[0].delta
+	if hasattr(delta, "content") and delta.content is not None:
+		print(delta.content, end="", flush=True)
+		full_response += delta.content
 
-print(f"Tokens:\n{response.choices[0].message.tokens}")
+# # Print results
+# print(f"Query:\n{messages[1]['content']}")
+# print(f"Generated Answer:\n{response.choices[0].message.content}")
+# print(f"Generated Answer:\n{response}")
