@@ -1,3 +1,9 @@
+############################
+# Parameters
+# NUM_SAMPLES = 16710
+NUM_SAMPLES = 1000
+############################
+
 from dataclasses import dataclass
 from datetime import datetime
 from distutils.util import strtobool
@@ -93,8 +99,9 @@ def train_function(model_args: ModelConfig, script_args: ScriptArguments, traini
     else:
         train_dataset = load_dataset(script_args.dataset_id_or_path, split=script_args.dataset_splits)
     
-    train_dataset = train_dataset.select(range(10000))
-    
+    # Select a random sample of the required size.
+    train_dataset = train_dataset.shuffle(seed=42).select(range(NUM_SAMPLES))
+
     logger.info(f'Loaded dataset with {len(train_dataset)} samples and the following features: {train_dataset.features}')
     
     ################
@@ -108,8 +115,18 @@ def train_function(model_args: ModelConfig, script_args: ScriptArguments, traini
     if tokenizer.pad_token is None: 
         tokenizer.pad_token = tokenizer.eos_token
     # if we use peft we need to make sure we use a chat template that is not using special tokens as by default embedding layers will not be trainable 
+
+    # Bob's edit:
+    # IMPORTANT for the DeepSeek-R1 models: the chat template strips out the CoT before training, which is bad!
+    # So we modify the Jinja2 template to not strip out the CoT.
+    current_template = tokenizer.init_kwargs.get("chat_template")
+    to_delete = "{% if '</think>' in content %}{% set content = content.split('</think>')[-1] %}{% endif %}"
+    new_template = current_template.replace(to_delete, "")
+    tokenizer.init_kwargs["chat_template"] = new_template
     
-    
+    # Bob's edit (since I got a warning):
+    tokenizer.padding_side = "right"
+
     #######################
     # Load pretrained model
     #######################

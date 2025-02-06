@@ -5,8 +5,7 @@ import logging
 import os
 import re
 from typing import Optional
-os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
-# os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1"
+os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "1"
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, set_seed, BitsAndBytesConfig
 from transformers.trainer_utils import get_last_checkpoint
