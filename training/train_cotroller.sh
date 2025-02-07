@@ -1,4 +1,4 @@
-model_id=cotroller_DeepSeek-R1-Distill-Qwen-1-5B_qlora_1k_ep1
+model_id=cotroller_DeepSeek-R1-Distill-Qwen-7B_qlora_ep1
 
 # Train:
 python3.11 scripts/run_cotroller_training.py --config receipes/cotroller.yaml

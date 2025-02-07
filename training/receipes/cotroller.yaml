@@ -1,12 +1,12 @@
 # Model arguments
-model_name_or_path: deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
+model_name_or_path: deepseek-ai/DeepSeek-R1-Distill-Qwen-7B
 model_revision: main
 torch_dtype: bfloat16
 attn_implementation: flash_attention_2
 use_liger: true
 bf16: true
 tf32: true
-output_dir: runs/cotroller_DeepSeek-R1-Distill-Qwen-1-5B_qlora_1k_ep1
+output_dir: runs/cotroller_DeepSeek-R1-Distill-Qwen-7B_qlora_ep1
 
 # Dataset arguments
 dataset_id_or_path: data/cotroller_train_dataset.json
@@ -28,6 +28,7 @@ lora_alpha: 16
 
 # Training arguments
 num_train_epochs: 1
+max_steps: 1000 ########################################
 per_device_train_batch_size: 8
 gradient_accumulation_steps: 2
 gradient_checkpointing: true

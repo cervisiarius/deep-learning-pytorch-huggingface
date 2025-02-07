@@ -19,7 +19,6 @@ from transformers.utils import is_liger_kernel_available
 from trl import SFTTrainer, TrlParser, ModelConfig, SFTConfig, get_peft_config
 from datasets import load_dataset
 from peft import AutoPeftModelForCausalLM
-import json
 
 if is_liger_kernel_available():
     from liger_kernel.transformers import AutoLigerKernelForCausalLM

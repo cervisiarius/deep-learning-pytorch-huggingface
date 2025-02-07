@@ -12,14 +12,14 @@ You are a helpful assistant. You first think about the reasoning process in the 
 messages = [
     {"role": "system", "content": system_message},
     {"role": "user", "content": """Return your final response within \\boxed{}.
-How many different ways can you choose 3 numbers from the set {1, 2, 3, 4, 5, 6, 7, 8, 9, 10} such that the sum of the 3 numbers is 15?
+Is a tree a DAG?
 
 ## NOTES
 
 Requirements for your chain of thought (i.e., the part of your response that is between <think> and </think>):
-- It should be 30 tokens long.
+- It should be 3000 tokens long.
 - It should start with the word "Alright".
-- It should end with the digit "5"."""},
+- It should end with the digit "7"."""},
     # Force the model to start its response with "<think>".
     # See advice at https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
     # {"role": "assistant", "content": "<think>\n"}
