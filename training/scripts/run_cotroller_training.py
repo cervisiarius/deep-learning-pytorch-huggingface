@@ -1,6 +1,6 @@
 ############################
 # Parameters
-NUM_SAMPLES = 16710
+# NUM_SAMPLES = 16710
 # NUM_SAMPLES = 1000
 ############################
 
@@ -32,6 +32,7 @@ class ScriptArguments:
     dataset_splits: str = "train"
     tokenizer_name_or_path: str = None
     spectrum_config_path: Optional[str] = None
+    num_samples: int
 
 
 ########################
