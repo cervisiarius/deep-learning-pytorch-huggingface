@@ -101,7 +101,7 @@ def train_function(model_args: ModelConfig, script_args: ScriptArguments, traini
         train_dataset = load_dataset(script_args.dataset_id_or_path, split=script_args.dataset_splits)
     
     # Select a random sample of the required size.
-    train_dataset = train_dataset.shuffle(seed=42).select(range(NUM_SAMPLES))
+    train_dataset = train_dataset.shuffle(seed=42).select(range(script_args.num_samples))
 
     logger.info(f'Loaded dataset with {len(train_dataset)} samples and the following features: {train_dataset.features}')
     
