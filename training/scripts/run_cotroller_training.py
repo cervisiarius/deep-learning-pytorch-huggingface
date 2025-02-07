@@ -28,11 +28,11 @@ if is_liger_kernel_available():
 ########################
 @dataclass
 class ScriptArguments:
+    num_samples: int
     dataset_id_or_path: str
     dataset_splits: str = "train"
     tokenizer_name_or_path: str = None
     spectrum_config_path: Optional[str] = None
-    num_samples: int
 
 
 ########################
@@ -104,7 +104,7 @@ def train_function(model_args: ModelConfig, script_args: ScriptArguments, traini
     
     # Remove data points whose CoT is longer than the max sequence length.
     # NB: This will still cut off some sequences (since the full seq doesn't have only the CoT, but also the prompt and the visible response).
-    train_dataset = train_dataset.filter(lambda x: x['cot_length'] <= script_args.max_seq_length)
+    train_dataset = train_dataset.filter(lambda x: x['cot_length'] <= training_args.max_seq_length)
     n_after_filtering = len(train_dataset)
     logger.info(f'Filtered {n_before_filtering - n_after_filtering} samples that were too long.')
 
