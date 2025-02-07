@@ -1,4 +1,4 @@
-model_id=cotroller_DeepSeek-R1-Distill-Qwen-7B_qlora_ep1
+model_id=cotroller_DeepSeek-R1-Distill-Qwen-1-5B_hyperfit
 username=cervisiarius
 
 # Train:

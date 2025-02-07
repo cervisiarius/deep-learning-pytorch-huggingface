@@ -100,9 +100,17 @@ def train_function(model_args: ModelConfig, script_args: ScriptArguments, traini
     else:
         train_dataset = load_dataset(script_args.dataset_id_or_path, split=script_args.dataset_splits)
     
+    n_before_filtering = len(train_dataset)
+    
+    # Remove data points whose CoT is longer than the max sequence length.
+    # NB: This will still cut off some sequences (since the full seq doesn't have only the CoT, but also the prompt and the visible response).
+    train_dataset = train_dataset.filter(lambda x: x['cot_length'] <= script_args.max_seq_length)
+    n_after_filtering = len(train_dataset)
+    logger.info(f'Filtered {n_before_filtering - n_after_filtering} samples that were too long.')
+
     # Select a random sample of the required size.
     train_dataset = train_dataset.shuffle(seed=42).select(range(script_args.num_samples))
-
+    
     logger.info(f'Loaded dataset with {len(train_dataset)} samples and the following features: {train_dataset.features}')
     
     ################

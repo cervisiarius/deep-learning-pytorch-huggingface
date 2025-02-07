@@ -30,6 +30,7 @@ def generate_r1_prompt(datapoint):
     # This can be made faster by not using the tokenizer.
     tokens = tokenizer.encode(cot, add_special_tokens=False)
     token0 = tokenizer.decode([tokens[0]])
+    cot_length = len(tokens)
     user += f"""\n
 ## NOTES
 
@@ -37,11 +38,14 @@ Requirements for your chain of thought (i.e., the part of your response that is 
 - It should be {len(tokens)} tokens long.
 - It should start with the word "{token0}".
 - It should end with the number "{rnd}"."""
-    return {"messages": [
+    return {
+        "messages": [
         {"role": "system", "content": system_msg},
         {"role": "user", "content": user},
         {"role": "assistant", "content": assistant}
-      ]}
+      ],
+      "cot_length": cot_length
+    }
 
 # Load dataset from the hub
 dataset = load_dataset("bespokelabs/Bespoke-Stratos-17k", split="train")
