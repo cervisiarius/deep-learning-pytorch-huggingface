@@ -11,8 +11,8 @@ You are a helpful assistant. You first think about the reasoning process in the 
 
 messages = [
     {"role": "system", "content": system_message},
-    {"role": "user", "content": """Return your final response within \\boxed{}.
-Is a tree a DAG?
+    {"role": "user", "content": """Return your final response within \\boxed{}. Answer in French.
+If $g(x)=1-x^2$ and $f(g(x))=\\frac{1-x^2}{x^2}$ when $x\\not=0$, then $f(1\/2)$ equals \n$\\mathrm{(A)\\ } 3\/4 \\qquad \\mathrm{(B) \\ }1 \\qquad \\mathrm{(C) \\  } 3 \\qquad \\mathrm{(D) \\  } \\sqrt{2}\/2 \\qquad \\mathrm{(E) \\  }\\sqrt{2}$
 
 ## NOTES
 
