@@ -28,8 +28,8 @@ if is_liger_kernel_available():
 ########################
 @dataclass
 class ScriptArguments:
-    num_samples: int
     dataset_id_or_path: str
+    num_samples: int = None
     dataset_splits: str = "train"
     tokenizer_name_or_path: str = None
     spectrum_config_path: Optional[str] = None
@@ -109,9 +109,15 @@ def train_function(model_args: ModelConfig, script_args: ScriptArguments, traini
     logger.info(f'Filtered {n_before_filtering - n_after_filtering} samples that were too long.')
 
     # Select a random sample of the required size.
-    train_dataset = train_dataset.shuffle(seed=42).select(range(script_args.num_samples))
+    train_dataset = train_dataset.shuffle(seed=42)
+    if script_args.num_samples is not None:
+        train_dataset = train_dataset.select(range(script_args.num_samples))
     
     logger.info(f'Loaded dataset with {len(train_dataset)} samples and the following features: {train_dataset.features}')
+    
+    # print(train_dataset[12])
+    # import sys
+    # sys.exit(0)
     
     ################
     # Load tokenizer
