@@ -15,14 +15,13 @@ messages = [
     {"role": "system", "content": system_message},
     {"role": "user", "content": """Return your final response within \\boxed{}.
 
-Consider this problem: "If Eliud Kipchoge could maintain his record-making marathon pace indefinitely, how many thousand hours would it take him to run the distance between the Earth and the Moon its closest approach? Please use the minimum perigee value on the Wikipedia page for the Moon when carrying out your calculation. Round your result to the nearest 1000 hours and do not use any comma separators if necessary."
-I want you to rephrase it in one sentence, without actually solving the problem.
+Calculate 1 million minus four-hundred fifty.
 
 ## NOTES
 
 Your "chain of thought" is the part of your response that is between "<think>" and "</think>".
 Requirements you must follow in your chain of thought:
-- Don't solve the problem; just rephrase it."""
+- don't use 'and'; use '&'"""
 		},
     # Force the model to start its response with "<think>".
     # See advice at https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-1.5B
