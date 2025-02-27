@@ -29,7 +29,7 @@ lora_alpha: 16
 # Training arguments
 # num_samples: 16710
 # num_train_epochs: 1
-max_steps: 1500 # 1 ep = 450 steps
+max_steps: 1510 # 1 ep = 450 steps
 per_device_train_batch_size: 8
 gradient_accumulation_steps: 2
 gradient_checkpointing: true

@@ -14,3 +14,6 @@ trl==0.12.1
 peft==0.13.2
 lighteval==0.6.2
 hf-transfer==0.1.8
+
+# Added by Bob
+ollama
