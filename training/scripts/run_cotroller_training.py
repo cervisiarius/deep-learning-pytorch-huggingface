@@ -1,9 +1,3 @@
-############################
-# Parameters
-# NUM_SAMPLES = 16710
-# NUM_SAMPLES = 1000
-############################
-
 from dataclasses import dataclass
 from datetime import datetime
 from distutils.util import strtobool
