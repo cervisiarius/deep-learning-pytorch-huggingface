@@ -1,6 +1,6 @@
 model_id=cotroller_DeepSeek-R1-Distill-Llama-8B
 username=cervisiarius
-num_gpus=1
+num_gpus=4
 
 # To avoid GPU OOM:
 export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
