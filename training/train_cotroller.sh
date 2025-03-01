@@ -1,9 +1,13 @@
-model_id=cotroller_DeepSeek-R1-Distill-Qwen-14B_1ep
+model_id=cotroller_DeepSeek-R1-Distill-Llama-8B
 username=cervisiarius
+num_gpus=1
+
+# To avoid GPU OOM:
+export PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 
 # Train:
 # python3 scripts/run_cotroller_training.py --config receipes/${model_id}.yaml
-accelerate launch --config_file configs/accelerate_configs/deepspeed_zero3.yaml --num_processes 4 scripts/run_cotroller_training.py --config receipes/${model_id}.yaml
+accelerate launch --config_file configs/accelerate_configs/deepspeed_zero3.yaml --num_processes ${num_gpus} scripts/run_cotroller_training.py --config receipes/${model_id}.yaml
 
 # Merge weights:
 # python3 scripts/merge_adapter_weights.py --peft_model_id runs/${model_id} --output_dir runs/${model_id} --save_tokenizer True

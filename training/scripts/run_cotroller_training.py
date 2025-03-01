@@ -94,25 +94,21 @@ def train_function(model_args: ModelConfig, script_args: ScriptArguments, traini
     else:
         train_dataset = load_dataset(script_args.dataset_id_or_path, split=script_args.dataset_splits)
     
-    n_before_filtering = len(train_dataset)
-    
-    # Remove data points whose CoT is longer than the max sequence length.
-    # NB: This will still cut off some sequences (since the full seq doesn't have only the CoT, but also the prompt and the visible response).
-    train_dataset = train_dataset.filter(lambda x: x['cot_length'] <= training_args.max_seq_length)
-    n_after_filtering = len(train_dataset)
-    logger.info(f'Filtered {n_before_filtering - n_after_filtering} samples that were too long.')
+    # # Remove data points whose CoT is longer than the max sequence length.
+    # n_before_filtering = len(train_dataset)
+    # # NB: This will still cut off some sequences (since the full seq doesn't have only the CoT, but also the prompt and the visible response).
+    # train_dataset = train_dataset.filter(lambda x: x['cot_length'] <= training_args.max_seq_length)
+    # n_after_filtering = len(train_dataset)
+    # logger.info(f'Filtered {n_before_filtering - n_after_filtering} samples that were too long.')
 
-    # Select a random sample of the required size.
-    train_dataset = train_dataset.shuffle(seed=42)
+    # Select a sample of the required size.
+    # train_dataset = train_dataset.shuffle(seed=42)
     if script_args.num_samples is not None:
         train_dataset = train_dataset.select(range(script_args.num_samples))
     
     logger.info(f'Loaded dataset with {len(train_dataset)} samples and the following features: {train_dataset.features}')
-    
-    # print(train_dataset[12])
-    # import sys
-    # sys.exit(0)
-    
+
+   
     ################
     # Load tokenizer
     ################
@@ -139,10 +135,6 @@ def train_function(model_args: ModelConfig, script_args: ScriptArguments, traini
         trust_remote_code=model_args.trust_remote_code,
     )
 
-    # print(f"==========================: {tokenizer.get_chat_template()}")
-    # print("$$$$$$$$$$$$$$$$")
-    # print(tokenizer.apply_chat_template(train_dataset[1]['messages'], tokenize=False))
-
     # Bob's edits:
     tokenizer = get_tokenizer_with_new_chat_template(tokenizer)
     tokenizer.padding_side = "right"
@@ -150,11 +142,6 @@ def train_function(model_args: ModelConfig, script_args: ScriptArguments, traini
     if tokenizer.pad_token is None: 
         tokenizer.pad_token = tokenizer.eos_token
    
-    # print(f"==========================: {tokenizer.get_chat_template()}")
-    # print("$$$$$$$$$$$$$$$$")
-    # print(tokenizer.apply_chat_template(train_dataset[1]['messages'], tokenize=False))
-    # for t in tokenizer.apply_chat_template(train_dataset[1]['messages']):
-    #     print(f"{tokenizer.decode([t])}:{t}", end='|')
     
     #######################
     # Load pretrained model
