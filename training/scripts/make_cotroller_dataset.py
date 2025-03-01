@@ -264,10 +264,10 @@ def generate_r1_prompt(datapoint):
         description = result['description']
         if f == identity:
             new_user = user
-            prefix = ""
+            prefix = "<think>\n"
         else:
             new_user = user + f"\n\n## NOTES\n\nInstructions that you must follow in your reasoning chain (the part of your response before your final answer):\n- {description}"
-            prefix = f"<think>\nOkay, so before I start reasoning, let me recall the user's instructions for my reasoning chain: \"{description}\"\nIt's really important that I adhere to these instructions in my reasoning chain, since otherwise the user's need would not be met. So from the next paragraph onward, I'll {description}.\n\n"
+            prefix = f"<think>\nOkay, so before I start reasoning, let me recall the user's instructions for my reasoning chain: I must {description}.\nIt's really important that I adhere to these instructions in my reasoning chain, since otherwise the user's need would not be met. So from the next paragraph onward, I'll {description}.\n\n"
         assistant = f"{new_cot}\n</think>\n\n{response}"
         conversation = [
                 # We use no system message according to DeepSeek specs <https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Llama-8B>.
