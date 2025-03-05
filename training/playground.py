@@ -50,6 +50,19 @@ while True:
 
 
 """
+Return your final response within \\boxed{{}}.\n\nCalculate 1 million minus four-hundred fifty.\n\nReply using only upper-case letters
+
+
+
+Return your final response within \\boxed{{}}.\n\nCalculate 1 million minus four-hundred fifty.\n\n## NOTES\n\nInstructions that you must follow in your reasoning chain (the part of your response before your final answer):\n- use only upper-case letters
+
+===
+
+<think>\nOkay, so before I start reasoning, let me recall the user's instructions for my reasoning chain: I must use only upper-case letters.\nIt's really important that I adhere to these instructions in my reasoning chain, since otherwise the user's need would not be met. So from the next paragraph onward, I'll use only upper-case letters.
+
+
+====
+
 (i.e., the part of your response between "<think>" and "</think>")
 
 How many primes are there?\n**Instructions for your reasoning chain**: Start every paragraph with a paragraph number.
