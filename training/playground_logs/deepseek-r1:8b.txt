@@ -500,3 +500,23 @@ First, subtract 400 from 1,000,000 to get 999,600.
 Then subtract the remaining 50 to arrive at 999,550.
 
 So, 1,000,000 - 450 = \\boxed{999550}
+
+
+=================== 2025-03-06 16:23:14.972227-08:00 ===================
+
+PROMPT> test
+PREFIX> test
+RESPONSE> 
+
+</think>
+Bonjour ! Comment puis-je vous aider aujourd'hui ?
+
+
+=================== 2025-03-06 16:26:56.587344-08:00 ===================
+
+PROMPT> test
+PREFIX> Good morning
+RESPONSE> ! How can I assist you today? Comment puis-je vous aider aujourd'hui ?
+
+</think>
+Bonjour ! Comment puis-je vous aider aujourd'hui ?

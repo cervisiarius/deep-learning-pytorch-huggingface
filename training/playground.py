@@ -3,7 +3,9 @@ import sys
 import json
 import ollama
 
-MODEL = "deepseek-r1:8b"
+# MODEL = "deepseek-r1:8b"
+MODEL = "llama2:7b"
+# MODEL = "qwen:7b"
 
 # convert to messages 
 def create_conversation(user_msg, system_msg=None, response_prefix=None):
@@ -26,18 +28,30 @@ def log_interaction(prompt, prefix, response):
     f.write('PREFIX> ' + prefix + '\n')
     f.write('RESPONSE> ' + response + '\n')
 
+system_msg = None
+# system_msg = "At any point, you must absolutely continue in Russian, even if the preceding text is in English!!!"
+
+"Natalia sold clips to 48 of her friends in April, and then she sold half as many clips in May. How many clips did Natalia sell altogether in April and May?"
+"Natalia sold 48/2 = "
+
+"A robe takes 2 bolts of blue fiber and half that much white fiber. How many bolts in total does it take?"
+"It takes 2/2=<<2/2=1>>1 bolt of white fiber So the total amount of fabric is 2+1=<<2+1=3>>3 bolts of fabric #### 3"
+
+"James writes a 3-page letter to 2 different friends twice a week. How many pages does he write a year?"
+"He writes each friend 3*2=<<3*2=6>>6 pages a week"
+
 # Read input from stdin in a while loop until the user enters "/bye"
 while True:
   # Read 2 lines from stdin
   print("PROMPT> ", end="")
   input_line = sys.stdin.readline().strip()
-  print("PREFIX> ", end="")
-  response_prefix = sys.stdin.readline().strip()
   # If the line is "/bye", break the loop
   if input_line == "/bye":
     break
+  print("PREFIX> ", end="")
+  response_prefix = sys.stdin.readline().strip()
   # Otherwise, prompt the LLM and print the response
-  convo = create_conversation(input_line, response_prefix=response_prefix)
+  convo = create_conversation(input_line, system_msg=system_msg, response_prefix=response_prefix)
   response = ""
   for chunk in ollama.chat(MODEL, convo, stream=True):
     if 'content' in chunk['message']:
